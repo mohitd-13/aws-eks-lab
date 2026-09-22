@@ -1,0 +1,85 @@
+name: Apply Plan
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '**.tf'
+      - '.github/workflows/apply.yml'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  plan:
+    name: Re-initialize backend & plan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Infra Code
+        uses: actions/checkout@v6
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1
+        with:
+          terraform-version: ${{ var.TF_VERSION }}
+
+      - name: Setup AWS Credentials
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd
+        with:
+          aws-region: ${{ var.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -no-color -out=tfplan
+
+      - name: Post plan to job summary
+        run: terraform show -no-color tfplan >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload plan artifact
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: tfplan
+          path: tfplan
+          retention-days: 1
+
+  apply:
+    name: Apply
+    needs: plan
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout Infra Code
+        uses: actions/checkout@v6
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1
+        with:
+          terraform-version: ${{ var.TF_VERSION }}
+
+      - name: Setup AWS Credentials
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd
+        with:
+          aws-region: ${{ var.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Download plan artifact
+        uses: actions/download-artifact@v3.1.0
+        with:
+          name: tfplan
+          path: tfplan
+
+      - name: Terraform Apply
+        run: terraform apply tfplan
+
+      - name: Verify node readiness
+        run: |
+          aws eks update-kubeconfig --name aws-eks-lab --region ${{ env.AWS_REGION }}
+          kubectl wait --for=condition=Ready nodes --all --timeout=300s
