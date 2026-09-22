@@ -1,0 +1,72 @@
+name: Validate Plan
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+    paths:
+      - '**.tf'
+      - '.github/workflows/validate-plan.yml'
+  pull_request:
+    branches:
+      - 'main/**'
+    paths:
+      - '**.tf'
+      - '.github/workflows/validate.yml'
+
+jobs:
+  validate:
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Infra Code
+        uses: actions/checkout@v6
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1
+        with:
+          terraform-version: ${{ var.TF_VERSION }}
+
+      - name: Setup AWS Credentials
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd
+        with:
+          aws-region: ${{ var.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init (no backend)
+        run: terraform init -backend=false
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@6e1e0642c0289bd619021bf6b34e3c08ed1e005a
+        with:
+          tflint-version: v0.52.0
+          cache: true
+
+      - name: Init and Run TFLint
+        run: |
+            tflint --init
+            tflint -f compact
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Scan for Security Issues
+        uses: bridgecrewio/checkov-action@99bb2caf247dfd9f03cf984373bc6043d4e32ebf
+        with:
+          output_format: cli,sarif
+          output_file: console,results.sarif
+
+      - name: Upload SARIF File
+        uses: github/codeql-action/upload-sarif@v2
+        if: success() || failure()
+        with:
+          sarif_file: results.sarif
