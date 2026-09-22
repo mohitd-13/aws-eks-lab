@@ -26,6 +26,17 @@ module "vpc" {
 
   enable_nat_gateway = true
   single_nat_gateway = true
+
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  private_subnet_tags = {
+    "kubernetes.io/role/internal-elb" = 1
+  }
+
+  public_subnet_tags = {
+    "kubernetes.io/role/elb" = 1
+  }
 }
 
 module "eks" {
@@ -38,9 +49,20 @@ module "eks" {
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
-  endpoint_public_access = true
+  endpoint_public_access                   = true
+  enable_irsa                              = true
+  enable_cluster_creator_admin_permissions = true
 
-  enable_irsa = true
+  addons = {
+    coredns    = {}
+    kube-proxy = {}
+    vpc-cni = {
+      before_compute = true
+    }
+    eks-pod-identity-agent = {
+      before_compute = true
+    }
+  }
 
   eks_managed_node_groups = {
     default = {
