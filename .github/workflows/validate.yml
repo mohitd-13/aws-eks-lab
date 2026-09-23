@@ -1,12 +1,13 @@
 name: Validate Plan
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'feature/**'
     paths:
       - '**.tf'
-      - '.github/workflows/validate-plan.yml'
+      - '.github/workflows/validate.yml'
   pull_request:
     branches:
       - 'main/**'
@@ -18,7 +19,6 @@ jobs:
   validate:
     permissions:
       contents: read
-      security-events: write
       actions: read
 
     runs-on: ubuntu-latest
@@ -30,12 +30,6 @@ jobs:
         uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1
         with:
           terraform-version: ${{ var.TF_VERSION }}
-
-      - name: Setup AWS Credentials
-        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd
-        with:
-          aws-region: ${{ var.AWS_REGION }}
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
