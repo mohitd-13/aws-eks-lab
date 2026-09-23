@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "vpc" {
-  source  = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=81e04e9613c1b9546f94739e7d090e6157ee86d2"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=81e04e9613c1b9546f94739e7d090e6157ee86d2"
 
   name = "aws-eks-lab"
   cidr = "10.0.0.0/16"
@@ -39,7 +39,7 @@ module "vpc" {
 }
 
 module "eks" {
-  source  = "git::https://github.com/terraform-aws-modules/terraform-aws-eks.git?ref=b7eabbd3848f09e62add631e0c7683b7db0db8b9"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-eks.git?ref=b7eabbd3848f09e62add631e0c7683b7db0db8b9"
 
   name               = "aws-eks-lab"
   kubernetes_version = "1.33"
