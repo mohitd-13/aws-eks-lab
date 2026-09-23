@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "vpc" {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=55d9916d3c8ae59e1f9d74be7825a1c355a54a5b"
+  source  = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=55d9916d3c8ae59e1f9d74be7825a1c355a54a5b"
   version = "5.10.0"
 
   name = "aws-eks-lab"
