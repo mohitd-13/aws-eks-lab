@@ -29,7 +29,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1
         with:
-          terraform-version: ${{ var.TF_VERSION }}
+          terraform-version: ${{ vars.TF_VERSION }}
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
