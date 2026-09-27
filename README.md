@@ -53,43 +53,41 @@ Before creating an eks cluster in your AWS account, you need to make sure that y
 To get started with creating your own cluster, follow these steps:
 
 1. Clone the repository and change directory:
-
-  ```bash
-  git clone https://github.com/mohitd-13/aws-eks-lab.git
-  cd aws-eks-lab
-  ```
+    ```bash
+    git clone https://github.com/mohitd-13/aws-eks-lab.git
+    cd aws-eks-lab
+    ```
 
 2. Initialize Terraform:
-
-  ```bash
-  terraform init -backend=false
-  ```
+    ```bash
+    terraform init -backend=false
+    ```
 
 3. View the resources that will be created:
 
-  ```bash
-  terraform plan
-  ```
+    ```bash
+    terraform plan
+    ```
 
 4. Apply the Terraform configuration:
 
-  ```bash
-  terraform apply -auto-approve
-  ```
+    ```bash
+    terraform apply -auto-approve
+    ```
 
 > [!NOTE]
 > It can take 15-20 minutes for all resources to be fully created, so wait before moving on to the next step.
 
 5. Update the kubeconfig to use your eks cluster
 
-  ```bash
-  aws eks update-kubeconfig --name $(terraform output --raw cluster_name) --region ap-south-1
-  ```
+    ```bash
+    aws eks update-kubeconfig --name $(terraform output --raw cluster_name) --region ap-south-1
+    ```
 6. Verify the cluster is up:
 
-  ```bash
-  kubectl get nodes
-  ```
+    ```bash
+    kubectl get nodes
+    ```
 
 ## Cost & Teardown
 
@@ -97,9 +95,9 @@ Running this lab costs roughly $0.19/hour (~$4.50/day): about $0.10/hr for the E
 
 Avoid heavy charge by destroying the cluster when you're done:
 
-  ```bash
-  terraform destroy -auto-approve
-  ```
+    ```bash
+    terraform destroy -auto-approve
+    ```
 
 > [!WARNING]
 > If `destroy` hangs or fails, check for resources created outside Terraform (e.g., a LoadBalancer provisioned by a Kubernetes Service), since these can hold onto the VPC and block deletion until removed manually.

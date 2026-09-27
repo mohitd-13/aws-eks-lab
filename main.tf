@@ -1,11 +1,7 @@
-provider "aws" {
-  region = var.aws_region
-}
-
 module "vpc" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=81e04e9613c1b9546f94739e7d090e6157ee86d2"
 
-  name = "aws-eks-lab"
+  name = var.cloud_name
   cidr = "10.0.0.0/16"
 
   azs = [
@@ -41,7 +37,7 @@ module "vpc" {
 module "eks" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-eks.git?ref=b7eabbd3848f09e62add631e0c7683b7db0db8b9"
 
-  name               = "aws-eks-lab"
+  name               = var.eks_cluster_name
   kubernetes_version = "1.33"
 
   vpc_id     = module.vpc.vpc_id
