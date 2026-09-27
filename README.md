@@ -104,7 +104,7 @@ Avoid heavy charge by destroying the cluster when you're done:
 
 ## CI/CD
 
-From continuous integration to continuous deployment, read the full guide on CI/CD pipeline here [CI/CD](./docs/CONTRIBUTION.md).
+From continuous integration via formating, linting, and code scanning, to automated continuous deployment on pr-merge, read the full guide on CI/CD pipeline here [CI/CD](./docs/CONTRIBUTION.md).
 
 ## Contribution
 
