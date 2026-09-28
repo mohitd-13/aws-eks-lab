@@ -20,7 +20,7 @@ resource "aws_iam_role" "eks_role" {
 }
 
 resource "aws_eks_pod_identity_association" "pod_identity_assoc" {
-  cluster_name    = var.eks_cluster_name
+  cluster_name    = module.eks.cluster_name
   namespace       = var.workload_namespace
   service_account = var.workload_sa
   role_arn        = aws_iam_role.eks_role.arn
