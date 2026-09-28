@@ -1,11 +1,12 @@
 name: Speculative Plan
 on:
+  workflow_dispatch:
   pull_request:
     branches:
-      - 'main/**'
+      - 'main'
     paths:
       - '**.tf'
-      - '.github/workflows/plan.yml'
+
 jobs:
   plan:
     permissions:

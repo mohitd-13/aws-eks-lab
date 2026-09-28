@@ -1,12 +1,13 @@
 name: Apply Plan
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'main'
     paths:
       - '**.tf'
-      - '.github/workflows/apply.yml'
+
 
 permissions:
   id-token: write
