@@ -12,7 +12,7 @@ This is a learning environment, not a production setup. It uses a single NAT gat
 
 ![ALT TEXT](./assets/aws-eks-lab-architecture-v2.svg)
 
-The aws-eks-lab architecture has two main parts: a VPC and an EKS cluster.
+**The aws-eks-lab architecture has two main parts: a VPC and an EKS cluster.**
 
 The VPC spans two availability zones, each with one public and one private subnet. An Internet Gateway attached to the VPC handles inbound and outbound internet traffic for the public subnets. A single NAT Gateway, deployed in the AZ-1 public subnet, lets both private subnets initiate outbound connections while blocking unsolicited inbound traffic — this is a deliberate cost tradeoff for a lab environment rather than a highly available design, since AZ-2's private subnet depends on AZ-1's NAT gateway.
 
@@ -39,7 +39,7 @@ The EKS cluster consists of an AWS-managed control plane, running in an AWS-owne
 
 ### Prerequisites
 
-Before creating an eks cluster in your AWS account, you need to make sure that you have the following installed on your local machine:
+**Before creating an eks cluster in your AWS account, you need to make sure that you have the following installed on your local machine:**
 
 - [Terraform](https://developer.hashicorp.com/terraform/install) >= 1.10
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) >= 2.x, configured with credentials (`aws configure`)
@@ -50,7 +50,7 @@ Before creating an eks cluster in your AWS account, you need to make sure that y
 
 ### Installation
 
-To get started with creating your own cluster, follow these steps:
+**To get started with creating your own cluster, follow these steps:**
 
 1. Clone the repository and change directory:
     ```bash
@@ -93,18 +93,18 @@ To get started with creating your own cluster, follow these steps:
 
 Running this lab costs roughly $0.19/hour (~$4.50/day): about $0.10/hr for the EKS control plane, $0.045/hr for the NAT gateway, and $0.04/hr for the single t3.medium node. Other resources like VPC, subnets, IAM roles and backend resources(s3, kms) don't carry an hourly charge. Data transfer throught NAT Gateway is billed per GB and isn't included in the estimate above. Prices can vary depending on the region and current rates for more information visit [AWS Price](https://aws.amazon.com/pricing/).
 
-Avoid heavy charge by destroying the cluster when you're done:
+**Avoid heavy charge by destroying the cluster when you're done:**
 
-    ```bash
-    terraform destroy -auto-approve
-    ```
+  ```bash
+  terraform destroy -auto-approve
+  ```
 
 > [!WARNING]
 > If `destroy` hangs or fails, check for resources created outside Terraform (e.g., a LoadBalancer provisioned by a Kubernetes Service), since these can hold onto the VPC and block deletion until removed manually.
 
 ## CI/CD
 
-From continuous integration via formating, linting, and code scanning, to automated continuous deployment on pr-merge, read the full guide on CI/CD pipeline here [CI/CD](./docs/CONTRIBUTION.md).
+From continuous integration via formating, linting, and code scanning, to automated continuous deployment on every pr-merge, read the full guide on CI/CD pipeline here [CI/CD](./docs/CONTRIBUTION.md).
 
 ## Contribution
 
