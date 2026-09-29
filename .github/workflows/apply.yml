@@ -71,7 +71,7 @@ jobs:
         run: terraform init
 
       - name: Download plan artifact
-        uses: actions/download-artifact@v3.1.0
+        uses: Legit-Labs/action-download-artifact@59e00ed697336cebfce47ebbcb4de08af1625ef7
         with:
           name: tfplan
           path: tfplan
