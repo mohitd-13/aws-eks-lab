@@ -73,7 +73,7 @@ jobs:
       - name: Download plan artifact
         uses: Legit-Labs/action-download-artifact@59e00ed697336cebfce47ebbcb4de08af1625ef7
         with:
-          workflow: apply.yml
+          workflow: Apply
           name: tfplan
           path: tfplan
 
