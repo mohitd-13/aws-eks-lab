@@ -19,7 +19,7 @@ variable "eks_cluster_name" {
 variable "eks_role_name" {
   description = "Name of the IAM Role for our EKS Cluster"
   type        = string
-  default     = "TerraformEKSLABRole"
+  default     = "aws-eks-cluster-payments-pod-role"
 }
 
 variable "workload_namespace" {
