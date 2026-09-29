@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  re_plan:
+  re-plan:
     name: Re-initialize backend & plan
     runs-on: ubuntu-latest
     steps:
@@ -49,7 +49,7 @@ jobs:
 
   apply:
     name: Apply
-    needs: plan
+    needs: re-plan
     runs-on: ubuntu-latest
     environment: production
     steps:
