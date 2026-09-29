@@ -8,13 +8,12 @@ on:
     paths:
       - '**.tf'
 
-
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  plan:
+  re_plan:
     name: Re-initialize backend & plan
     runs-on: ubuntu-latest
     steps:
