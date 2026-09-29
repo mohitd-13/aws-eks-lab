@@ -71,11 +71,9 @@ jobs:
         run: terraform init
 
       - name: Download plan artifact
-        uses: Legit-Labs/action-download-artifact@59e00ed697336cebfce47ebbcb4de08af1625ef7
+        uses: actions/download-artifact@v5
         with:
-          workflow: Apply
           name: tfplan
-          path: tfplan
 
       - name: Terraform Apply
         run: terraform apply tfplan
