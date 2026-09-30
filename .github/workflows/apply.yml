@@ -35,7 +35,10 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -no-color -out=tfplan
+        run: |
+            terraform plan \
+            -var "eks_permissions_boundary_arn=${{ vars.CI_PERMISSIONS_BOUNDARY_ARN }}" \
+            -no-color -out=tfplan
 
       - name: Post plan to job summary
         run: terraform show -no-color tfplan >> "$GITHUB_STEP_SUMMARY"
@@ -76,8 +79,7 @@ jobs:
           name: tfplan
 
       - name: Terraform Apply
-        run: |
-            terraform apply tfplan -var="eks_permissions_boundary_arn=${{ vars.CI_PERMISSIONS_BOUNDARY_ARN }}"
+        run: terraform apply tfplan
 
       - name: Verify node readiness
         run: |
