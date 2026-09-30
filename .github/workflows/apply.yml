@@ -76,7 +76,8 @@ jobs:
           name: tfplan
 
       - name: Terraform Apply
-        run: terraform apply tfplan
+        run: |
+            terraform apply tfplan -var="eks_permissions_boundary_arn=${{ vars.CI_PERMISSIONS_BOUNDARY_ARN }}"
 
       - name: Verify node readiness
         run: |

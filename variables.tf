@@ -16,6 +16,12 @@ variable "eks_cluster_name" {
   default     = "aws-eks-cluster"
 }
 
+variable "eks_permissions_boundary_arn" {
+  description = "Optional IAM Permissions Boundary for the EKS Cluster module to use"
+  type        = string
+  default     = null
+}
+
 variable "eks_role_name" {
   description = "Name of the IAM Role for our EKS Cluster"
   type        = string

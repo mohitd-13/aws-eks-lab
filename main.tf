@@ -43,6 +43,9 @@ module "eks" {
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
+  iam_role_name                 = "aws-eks-cluster"
+  iam_role_permissions_boundary = var.eks_permissions_boundary_arn
+
   endpoint_public_access                   = true
   enable_irsa                              = true
   enable_cluster_creator_admin_permissions = true
