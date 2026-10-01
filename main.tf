@@ -74,4 +74,6 @@ module "eks" {
 
     }
   }
+
+  tags = { Project = "aws-eks-lab" }
 }
