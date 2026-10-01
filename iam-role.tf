@@ -15,8 +15,9 @@ data "aws_iam_policy_document" "eks_trust" {
 }
 
 resource "aws_iam_role" "eks_role" {
-  name               = var.eks_role_name
-  assume_role_policy = data.aws_iam_policy_document.eks_trust.json
+  name                 = var.eks_role_name
+  assume_role_policy   = data.aws_iam_policy_document.eks_trust.json
+  permissions_boundary = var.eks_permissions_boundary_arn
 }
 
 resource "aws_eks_pod_identity_association" "pod_identity_assoc" {

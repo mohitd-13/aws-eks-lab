@@ -69,7 +69,9 @@ module "eks" {
       max_size     = 1
       desired_size = 1
 
-      subnet_ids = module.vpc.private_subnets
+      subnet_ids                    = module.vpc.private_subnets
+      iam_role_permissions_boundary = var.eks_permissions_boundary_arn
+
     }
   }
 }
