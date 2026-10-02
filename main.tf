@@ -47,6 +47,7 @@ module "eks" {
   iam_role_permissions_boundary = var.eks_permissions_boundary_arn
 
   endpoint_public_access                   = true
+  enable_irsa                              = false
   enable_cluster_creator_admin_permissions = true
 
   addons = {
