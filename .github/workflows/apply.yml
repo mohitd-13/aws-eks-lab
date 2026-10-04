@@ -81,7 +81,14 @@ jobs:
       - name: Terraform Apply
         run: terraform apply tfplan
 
-      - name: Verify node readiness
+      - name: Generate kubeconfig
         run: |
-          aws eks update-kubeconfig --name $(terraform output --raw cluster_name) --region ${{ vars.AWS_REGION }}
-          kubectl wait --for=condition=Ready nodes --all --timeout=300s
+          {
+              echo 'EKS_CREDS<<EOF'
+              aws eks update-kubeconfig --region ${{ vars.AWS_REGION }} --name $(terraform output --raw cluster_name) --dry-run | base64
+              echo EOF
+          } >> $GITHUB_ENV
+      - uses: tale/kubectl-action@v1
+        with:
+          base64-kube-config: ${{ env.EKS_CREDS }}
+      - run: kubectl wait --for=condition=Ready nodes --all --timeout=300s
