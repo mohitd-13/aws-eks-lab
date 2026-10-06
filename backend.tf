@@ -1,3 +1,4 @@
+# Backend configuration for storing Terraform state files
 terraform {
   backend "s3" {
     bucket       = "terraform-statefile-bucket-656338545145"
